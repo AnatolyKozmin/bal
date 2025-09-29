@@ -1,0 +1,25 @@
+services:
+  tma-frontend:
+    build:
+      context: ./tma-app
+    container_name: tma-frontend
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+    environment:
+      - VITE_API_BASE=http://localhost:8000
+
+  backend:
+    build:
+      context: ./backend
+    container_name: bal-backend
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - BAL_GSHEET_ID=${BAL_GSHEET_ID}
+      - BAL_GSHEET_WORKSHEET=${BAL_GSHEET_WORKSHEET:-Лист1}
+      - BAL_CORS_ORIGINS=http://localhost:5173
+      - GOOGLE_APPLICATION_CREDENTIALS_B64=${GOOGLE_APPLICATION_CREDENTIALS_B64}
+
+
