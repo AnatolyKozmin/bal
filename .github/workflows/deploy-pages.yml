@@ -38,7 +38,7 @@ jobs:
           # Caching disabled to avoid path resolution warnings
 
       - name: Install
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build
         env:
