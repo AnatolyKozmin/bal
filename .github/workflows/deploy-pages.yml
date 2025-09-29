@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE: /<repo-name>/
+          VITE_BASE: /bal/
         run: npm run build
 
       - name: Upload artifact
