@@ -28,6 +28,13 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$GITHUB_WORKSPACE/tma-app"
 
+      - name: Debug list files
+        run: |
+          pwd
+          ls -la
+          echo "---- tma-app ----"
+          ls -la tma-app || true
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -35,12 +42,14 @@ jobs:
           # Caching disabled to avoid path resolution warnings
 
       - name: Install
-        run: npm install --no-audit --no-fund --prefix tma-app
+        working-directory: tma-app
+        run: npm install --no-audit --no-fund
 
       - name: Build
         env:
           VITE_BASE: /bal/
-        run: npm run build --prefix tma-app
+        working-directory: tma-app
+        run: npm run build
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
