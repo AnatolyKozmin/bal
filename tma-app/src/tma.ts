@@ -17,4 +17,13 @@ export function closeTelegramWebApp(): void {
   try { tg?.close?.(); } catch {}
 }
 
+export function getTelegramUser(): { id: number | null; username: string | null } {
+  const tg = (window as any)?.Telegram?.WebApp;
+  const user = tg?.initDataUnsafe?.user;
+  return {
+    id: user?.id ?? null,
+    username: user?.username ?? null,
+  };
+}
+
 

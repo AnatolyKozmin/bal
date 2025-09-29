@@ -21,5 +21,23 @@ services:
       - BAL_GSHEET_WORKSHEET=${BAL_GSHEET_WORKSHEET:-Лист1}
       - BAL_CORS_ORIGINS=http://localhost:5173
       - GOOGLE_APPLICATION_CREDENTIALS_B64=${GOOGLE_APPLICATION_CREDENTIALS_B64}
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    container_name: bal-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 
 
