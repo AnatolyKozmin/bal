@@ -17,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: tma-app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,12 +35,12 @@ jobs:
           # Caching disabled to avoid path resolution warnings
 
       - name: Install
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --prefix tma-app
 
       - name: Build
         env:
           VITE_BASE: /bal/
-        run: npm run build
+        run: npm run build --prefix tma-app
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
