@@ -10,6 +10,14 @@ type FormData = {
   group: string
   faculty: string
   studentId: string
+  soloOrDuo: string
+  partnerIsStudent: string
+  partnerUniversity: string
+  partnerFirstName: string 
+  partnerLastName: string
+  partnerPatronymic: string
+  partnerGroup: string
+  partnerStudentId: string
 }
 
 const form = reactive<FormData>({
@@ -18,21 +26,43 @@ const form = reactive<FormData>({
   patronymic: '',
   group: '',
   faculty: '',
-  studentId: ''
+  studentId: '',
+  soloOrDuo: '',
+  partnerIsStudent: '',
+  partnerUniversity: '',
+  partnerFirstName: '', 
+  partnerLastName: '',
+  partnerPatronymic: '',
+  partnerGroup: '',
+  partnerStudentId: '',
 })
+
 
 const groupPattern = /^[А-ЯA-ZЁ]{2,5}\d{2}-\d{1,2}$/
 
+
 const isValid = computed(() => {
-  return (
+  const mainValid =
     form.firstName.trim().length > 1 &&
     form.lastName.trim().length > 1 &&
     form.patronymic.trim().length > 1 &&
     groupPattern.test(form.group.trim()) &&
     form.faculty.trim().length > 0 &&
-    form.studentId.trim().length >= 4
-  )
+    form.studentId.trim().length >= 4 &&
+    (form.soloOrDuo === 'Один' || form.soloOrDuo === 'В паре')
+  if (form.soloOrDuo === 'В паре') {
+    return (
+      mainValid &&
+      form.partnerFirstName?.trim().length > 1 &&
+      form.partnerLastName?.trim().length > 1 &&
+      form.partnerPatronymic?.trim().length > 1 &&
+      groupPattern.test(form.partnerGroup?.trim() || '') &&
+      form.partnerStudentId?.trim().length >= 4
+    )
+  }
+  return mainValid
 })
+
 
 function submit() {
   const payload = { ...form }
@@ -92,10 +122,45 @@ function submit() {
       <input v-model.trim="form.studentId" placeholder="123456" />
     </label>
 
+    <fieldset class="solo_or_duo_change"> 
+      <legend>Вы будете одни или с парой?</legend>
+      <label class="radio">
+        <input type="radio" value="Один" v-model="form.soloOrDuo" /> Один
+      </label>
+      <label class="radio">
+        <input type="radio" value="В паре" v-model="form.soloOrDuo" /> В паре
+      </label>
+    </fieldset>
+
+    <!-- Дополнительные поля для второго участника -->
+    <div v-if="form.soloOrDuo === 'В паре'" style="margin-top: 10px; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
+      <h4>Данные второго участника</h4>
+      <label>
+        <span>Имя</span>
+        <input v-model.trim="form.partnerFirstName" />
+      </label>
+      <label>
+        <span>Фамилия</span>
+        <input v-model.trim="form.partnerLastName" />
+      </label>
+      <label>
+        <span>Отчество</span>
+        <input v-model.trim="form.partnerPatronymic" />
+      </label>
+      <label>
+        <span>Группа (формат ПИ23-1)</span>
+        <input v-model.trim="form.partnerGroup" placeholder="ПИ23-1" />
+      </label>
+      <label>
+        <span>№ студ. билета</span>
+        <input v-model.trim="form.partnerStudentId" placeholder="123456" />
+      </label>
+    </div>
+
     <button :disabled="!isValid" type="submit">Отправить</button>
   </form>
   <p class="hint">Демо: данные пока не отправляются на сервер.</p>
-  </template>
+</template>
 
 <style scoped>
 .survey {
