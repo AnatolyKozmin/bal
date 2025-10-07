@@ -3,7 +3,7 @@ import SurveyForm from './components/SurveyForm.vue'
 </script>
 
 <template>
-  <h1>Регистрация на мероприятие</h1>
+  <h1></h1>
   <SurveyForm />
 </template>
 
