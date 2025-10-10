@@ -12,6 +12,7 @@ const showConsentButtons = ref(false)
 const sadText = ref('')
 
 import { reactive } from 'vue'
+import FirstStep from './FirstStep.vue'
 const form = reactive({
   fio: '',
   course: '',
@@ -27,11 +28,8 @@ const form = reactive({
   sst: '',
 })
 
-function autoGrow(e: Event) {
-  const target = e.target as HTMLTextAreaElement
-  target.style.height = 'auto'
-  target.style.height = target.scrollHeight + 'px'
-}
+
+
 
 function nextPage() {
   // Здесь можно добавить логику для отображения следующих вопросов
@@ -138,178 +136,143 @@ onMounted(() => {
     <div v-if="showForm">
       <div class="form-header">Анкета кандидата</div>
       <form class="survey-form" @submit.prevent="nextPage">
-        <label>
-          <span>1. ФИО</span>
-          <input v-model="form.fio" required />
-        </label>
-        <label>
-          <span>2. Курс обучения</span>
-          <input v-model="form.course" required />
-        </label>
-        <label>
-          <span>3. Факультет</span>
-          <input v-model="form.faculty" required />
-        </label>
-        <label>
-          <span>4. Группа обучения (в формате УАиА22-3)</span>
-          <input v-model="form.group" required placeholder="УАиА22-3" />
-        </label>
-        <label>
-          <span>5. Телефон (в формате 8 (ХХХ) ХХХ – ХХ – ХХ)</span>
-          <input v-model="form.phone" required placeholder="8 (___) ___-__-__" />
-        </label>
-        <label>
-          <span>6. Почта (gmail.com)</span>
-          <input v-model="form.email" required placeholder="example@gmail.com" />
-        </label>
-        <label>
-          <span>7. Ссылка на ВК</span>
-          <input v-model="form.vk" required placeholder="https://vk.com/..." />
-        </label>
-        <label>
-          <span>8. Ссылка на ТГ</span>
-          <input v-model="form.tg" required placeholder="https://t.me/..." />
-        </label>
-        <fieldset>
-          <legend>9. Успеваемость на последней сессии</legend>
-          <label><input type="radio" v-model="form.session" value="все 5" required /> все 5</label>
-          <label><input type="radio" v-model="form.session" value="4 и 5" /> 4 и 5</label>
-          <label><input type="radio" v-model="form.session" value="есть 3" /> есть 3</label>
-          <label><input type="radio" v-model="form.session" value="есть пересдачи" /> есть пересдачи</label>
-          <label><input type="radio" v-model="form.session" value="ещё не сдавал сессию" /> ещё не сдавал сессию</label>
-        </fieldset>
-        <fieldset>
-          <legend>10. Твой размер футболки</legend>
-          <label><input type="radio" v-model="form.tshirt" value="XS" required /> XS</label>
-          <label><input type="radio" v-model="form.tshirt" value="S" /> S</label>
-          <label><input type="radio" v-model="form.tshirt" value="M" /> M</label>
-          <label><input type="radio" v-model="form.tshirt" value="L" /> L</label>
-          <label><input type="radio" v-model="form.tshirt" value="XL" /> XL</label>
-          <label><input type="radio" v-model="form.tshirt" value="XXL" /> XXL</label>
-        </fieldset>
-        <label>
-          <span>11. Есть ли у тебя аллергии на какие-либо продукты или иные особенности питания?</span>
-          <textarea v-model="form.food" rows="2" @input="autoGrow($event)" />
-        </label>
-        <fieldset>
-          <legend>12. Состоишь ли ты в ССт сейчас?</legend>
-          <label><input type="radio" v-model="form.sst" value="Нет, не подавался в ССт" required /> Нет, не подавался в ССт</label>
-          <label><input type="radio" v-model="form.sst" value="Нет, не прошёл в ССт" /> Нет, не прошёл в ССт</label>
-          <label><input type="radio" v-model="form.sst" value="Да, с октября 2024 года" /> Да, с октября 2024 года</label>
-          <label><input type="radio" v-model="form.sst" value="Да, с прошлого учебного года" /> Да, с прошлого учебного года</label>
-        </fieldset>
-        <button type="submit" class="next-btn">Следующая страница</button>
+        <FirstStep :form="form" />
+        <!-- Первый шаг (все поля и кнопка перенесены в FirstStep.vue) -->
       </form>
     </div>
-  .form-header {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #222;
-    margin-bottom: 18px;
-    text-align: center;
-    width: 100%;
-  }
-
+  
     <!-- конец корневого блока greeting -->
   </div>
 </template>
 
 
 <style scoped>
-
-
+/* Базовая разметка и фон */
 html, body {
   background: #fff !important;
   min-height: 100vh;
 }
 
-
 .greeting {
   position: relative;
-  width: 100%;
-  max-width: 100vw;
-  min-height: 100vh;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  overflow-y: auto;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 114vh;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 999;
+    overflow-y: auto;
+    text-align: center;
+    padding: 0.8rem 4.2rem 1.4rem;
+    box-sizing: border-box;
 }
+
 .animated {
-  font-size: 2.2rem;
-  font-weight: bold;
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
+  font-weight: 700;
   color: #000;
-  letter-spacing: 2px;
-  white-space: pre;
-  transition: color 0.3s;
+  letter-spacing: 0.2px;
+  white-space: pre-line;
+  transition: color 0.2s;
+  text-align: center;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 0 2.8rem;
+  box-sizing: border-box;
 }
+
 .consent-block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
+  width: 100%;
 }
+
 .consent-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  line-height: 1.25;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 0 2.8rem;
+  box-sizing: border-box;
+}
+.consent-text > div {
+  display: block;
+  width: 100%;
   text-align: center;
 }
+.animated { display: block; margin: 0 auto; }
+
 .consent-buttons {
   display: flex;
-  gap: 18px;
+  gap: 12px;
 }
 .consent-buttons button {
-  padding: 10px 24px;
-  border-radius: 10px;
+  padding: clamp(10px, 3vw, 14px) clamp(14px, 4.5vw, 24px);
+  border-radius: 12px;
   border: 1px solid #d0d0d0;
   background: #fff;
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: clamp(1rem, 3.2vw, 1.15rem);
   color: #222;
   cursor: pointer;
-  transition: background 0.2s;
 }
-.consent-buttons button:hover {
-  background: #f0f0f0;
-}
+.consent-buttons button:hover { background: #f5f5f5; }
+
 .survey-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   margin: 0 auto;
+  padding: 0 2.8rem;
+  box-sizing: border-box;
 }
-.survey-form label, .survey-form fieldset {
+
+@media (max-width: 360px) {
+  .greeting { padding: 1.4rem; }
+  .animated { padding: 0 1rem; }
+  .consent-text { padding: 0 1rem; }
+  .survey-form { padding: 0 1rem; }
+}
+.survey-form label,
+.survey-form fieldset {
   display: flex;
   flex-direction: column;
   gap: 6px;
   color: #000;
 }
-.survey-form input, .survey-form textarea {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #d0d0d0;
-  font-size: 16px;
-  resize: none;
-}
+.survey-form input,
 .survey-form textarea {
-  min-height: 40px;
-  max-height: 200px;
-}
-.survey-form fieldset {
-  border: 1px solid #e0e0e0;
+  padding: clamp(12px, 3vw, 16px) clamp(12px, 3.2vw, 16px);
   border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  font-size: clamp(1rem, 2.8vw, 1.05rem);
+}
+.survey-form textarea { min-height: 48px; max-height: 220px; }
+.survey-form fieldset {
+  border: 1px solid #eee;
+  border-radius: 8px;
   padding: 10px 12px;
-  gap: 8px;
 }
-.survey-form legend {
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #000;
-}
-.survey-form span {
-  color: #000;
+.survey-form legend { font-weight: 600; margin-bottom: 6px; }
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .animated { font-size: 1.2rem; }
+  .consent-text { font-size: 0.98rem; }
+  .survey-form { max-width: 94vw; }
 }
 
 </style>
